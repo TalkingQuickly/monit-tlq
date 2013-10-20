@@ -1,0 +1,30 @@
+set daemon <%= node[:monit][:poll_period] || 30 %>
+
+set logfile syslog facility log_daemon
+
+<% if node[:monit][:notify_emails] %>
+  <% node[:monit][:notify_emails].each do |email| %>
+    <% if node[:monit][:minimise_alerts] %>
+        set alert <%= email %> but not on {instance, pid}
+    <% else %>
+        set alert <%= email %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if node[:monit][:enable_emails] %>
+  set mailserver <%= node[:monit][:mailserver][:host] %> port <%= node[:monit][:mailserver][:port] %>
+    username <%= node[:monit][:mailserver][:username] %> 
+    password <%= node[:monit][:mailserver][:password] %>
+    using tlsv1
+    with timeout 30 seconds
+    using hostname <%= node[:monit][:mailserver][:hostname] %>
+<% end %>
+
+set httpd port 2812 and
+    use address localhost
+    allow localhost
+    allow 192.168.0.0/255.255.255.0 
+    allow <%= "#{node[:monit][:web_interface][:allow][0]}:#{node[:monit][:web_interface][:allow][1]}"%>
+
+include /etc/monit/conf.d/*.conf
