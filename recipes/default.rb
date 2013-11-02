@@ -19,36 +19,11 @@ update-rc.d -f monit remove
 end
 
 # Use upstart to manage monit
-
 file '/etc/init/monit.conf' do
   owner "root"
   group "root"
   mode "0644"
-  content <<-EOF
-
-# after adding this file run
-#   initctl reload-configuration
-#
-# You can manually start and stop monit like this:
-#
-# start monit
-# stop monit
-#
-
-description "Monit service manager"
-
-limit core unlimited unlimited
-
-start on runlevel [2345]
-stop on runlevel [!2345]
-
-expect daemon
-respawn
-
-exec /usr/bin/monit -c /etc/monit/monitrc
-
-pre-stop exec /usr/bin/monit -c /etc/monit/monitrc quit
-  EOF
+  source "monit-upstart.conf.erb"
 end
 
 # allow monit to startup
