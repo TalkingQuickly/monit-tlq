@@ -61,13 +61,4 @@ end
 
 execute "initctl reload-configuration"
 
-bash "opening ufw for monit traffic" do
-  user "root"
-  code <<-EOC
-ufw allow 2812
-ufw --force enable
-ufw allow 2812
-  EOC
-end
-
 execute "service monit restart"
