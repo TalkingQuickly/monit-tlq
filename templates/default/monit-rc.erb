@@ -23,6 +23,7 @@ set mailserver <%= node[:monit][:mailserver][:host] %> port <%= node[:monit][:ma
 
 set httpd port 2812 and
     use address localhost
+    allow localhost
     allow <%= "#{node[:monit][:web_interface][:allow][0]}:#{node[:monit][:web_interface][:allow][1]}"%>
 
 include /etc/monit/conf.d/*.conf
