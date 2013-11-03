@@ -2,6 +2,6 @@ name              "monit-tlq"
 maintainer        "Ben Dixon"
 maintainer_email  "ben@talkingquickly.co.uk"
 description       "Basic monit installation"
-version           "0.3.0"
+version           "0.3.1"
 
 supports      "ubuntu"

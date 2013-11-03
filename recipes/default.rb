@@ -19,7 +19,7 @@ update-rc.d -f monit remove
 end
 
 # Use upstart to manage monit
-file '/etc/init/monit.conf' do
+template '/etc/init/monit.conf' do
   owner "root"
   group "root"
   mode "0644"
