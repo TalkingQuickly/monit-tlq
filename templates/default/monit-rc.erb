@@ -7,18 +7,18 @@ set logfile syslog facility log_daemon
   <% if node[:monit][:notify_emails] %>
     <% node[:monit][:notify_emails].each do |email| %>
       <% if node[:monit][:minimise_alerts] %>
-          set alert <%= email %> but not on {instance, pid}
+set alert <%= email %> but not on {instance, pid}
       <% else %>
-          set alert <%= email %>
+set alert <%= email %>
       <% end %>
     <% end %>
   <% end %>
-  set mailserver <%= node[:monit][:mailserver][:host] %> port <%= node[:monit][:mailserver][:port] %>
-    username <%= node[:monit][:mailserver][:username] %> 
-    password <%= node[:monit][:mailserver][:password] %>
-    using tlsv1
-    with timeout 30 seconds
-    using hostname <%= node[:monit][:mailserver][:hostname] %>
+set mailserver <%= node[:monit][:mailserver][:host] %> port <%= node[:monit][:mailserver][:port] %>
+  username "<%= node[:monit][:mailserver][:username] %>"
+  password "<%= node[:monit][:mailserver][:password] %>"
+  using tlsv1
+  with timeout 30 seconds
+  using hostname "<%= node[:monit][:mailserver][:hostname] %>"
 <% end %>
 
 set httpd port 2812 and
