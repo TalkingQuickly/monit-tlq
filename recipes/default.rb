@@ -7,15 +7,16 @@ template "/etc/monit/monitrc" do
   group "root"
   mode "0700"
   source "monit-rc.erb"
+  notifies :run, "execute[restart-monit]", :immediately
 end
 
 # disable traditional init.d way of managing monit
 bash "disabling init.d script for monit" do
   user "root"
   code <<-EOC
-/etc/init.d/monit stop
-update-rc.d -f monit remove
+    update-rc.d -f monit remove
   EOC
+  #  /etc/init.d/monit stop
 end
 
 # Use upstart to manage monit
@@ -24,6 +25,7 @@ template '/etc/init/monit.conf' do
   group "root"
   mode "0644"
   source "monit-upstart.conf.erb"
+  notifies :run, "execute[restart-monit]", :immediately
 end
 
 # allow monit to startup
@@ -32,8 +34,11 @@ template '/etc/default/monit' do
   group "root"
   mode "0644"
   source "allow-monit-start.erb"
+  notifies :run, "execute[restart-monit]", :immediately
 end
 
-execute "initctl reload-configuration"
-
-execute "service monit restart"
+execute "restart-monit" do
+  command "initctl reload-configuration"
+  command "service monit restart"
+  action :nothing
+end
