@@ -1,9 +1,9 @@
-set daemon <%= node[:monit][:poll_period] || 30 %>
+set daemon <%= node[:monit] && node[:monit][:poll_period] || 30 %>
 
 set logfile syslog facility log_daemon
 
 
-<% if node[:monit][:enable_emails] %>
+<% if node[:monit] && node[:monit][:enable_emails] %>
   <% if node[:monit][:notify_emails] %>
     <% node[:monit][:notify_emails].each do |email| %>
       <% if node[:monit][:minimise_alerts] %>
@@ -13,17 +13,21 @@ set alert <%= email %>
       <% end %>
     <% end %>
   <% end %>
+  <% if node[:monit][:mailserver] %>
 set mailserver <%= node[:monit][:mailserver][:host] %> port <%= node[:monit][:mailserver][:port] %>
   username "<%= node[:monit][:mailserver][:username] %>"
   password "<%= node[:monit][:mailserver][:password] %>"
   using tlsv1
   with timeout 30 seconds
   using hostname "<%= node[:monit][:mailserver][:hostname] %>"
+  <% end %>
 <% end %>
 
 set httpd port 2812 and
     use address localhost
     allow localhost
-    allow <%= "#{node[:monit][:web_interface][:allow][0]}:#{node[:monit][:web_interface][:allow][1]}"%>
+    <% if node[:monit] && node[:monit][:web_interface] && node[:monit][:web_interface][:allow] %>
+      allow <%= "#{node[:monit][:web_interface][:allow][0]}:#{node[:monit][:web_interface][:allow][1]}"%>
+    <% end %>
 
 include /etc/monit/conf.d/*.conf
