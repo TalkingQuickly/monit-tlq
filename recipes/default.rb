@@ -10,7 +10,7 @@ template "/etc/monit/monitrc" do
   notifies :run, "execute[restart-monit]", :immediately
 end
 
-# disable traditional init.d way of managing monit
+# disable traditional init.d way of starting monit
 bash "disabling init.d script for monit" do
   user "root"
   code <<-EOC
@@ -39,6 +39,6 @@ end
 
 execute "restart-monit" do
   command "initctl reload-configuration"
-  command "service monit restart"
+  command "monit reload"
   action :nothing
 end
