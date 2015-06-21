@@ -28,7 +28,7 @@ set httpd port 2812 and
     use address localhost
     allow localhost
     <% if node[:monit] && node[:monit][:web_interface] && node[:monit][:web_interface][:allow] %>
-           allow "<%= node[:monit][:web_interface][:allow][0]" %>":"<%=node[:monit][:web_interface][:allow][1]%>"
+           allow "<%= node[:monit][:web_interface][:allow][0] %>":"<%=node[:monit][:web_interface][:allow][1]%>"
 
     <% end %>
 
