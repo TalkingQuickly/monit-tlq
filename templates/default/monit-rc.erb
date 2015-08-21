@@ -15,7 +15,7 @@ set alert <%= email %>
   <% end %>
 
 <% if node[:monit][:mailserver] %>
-set mailserver "<%= node[:monit][:mailserver][:host] %>' port <%= node[:monit][:mailserver][:port] %>"
+set mailserver <%= node[:monit][:mailserver][:host] %> port <%= node[:monit][:mailserver][:port] %>
   username "<%= node[:monit][:mailserver][:username] %>"
   password "<%= node[:monit][:mailserver][:password] %>"
   using tlsv1
